@@ -3,6 +3,7 @@ using ApiInteligenteTareas.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace ApiInteligenteTareas.API.Controllers
 {
     [ApiController]
@@ -17,78 +18,50 @@ namespace ApiInteligenteTareas.API.Controllers
         }
 
         // GET: api/tareas
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Tarea>>> GetTareas(
-            string? estado,
-            string? prioridad,
-            DateTime? fechaInicio,
-            DateTime? fechaFin)
+       [HttpGet]
+public async Task<ActionResult<IEnumerable<Tarea>>> GetTareas(
+    string? estado,
+    string? prioridad,
+    DateTime? fechaInicio,
+    DateTime? fechaFin)
+{
+    var query = _context.Tareas.AsQueryable();
+
+    // Validación fechas
+    if (fechaInicio.HasValue && fechaFin.HasValue)
+    {
+        if (fechaInicio > fechaFin)
         {
-            var estadosValidos = new[]
-            {
-                "Pendiente",
-                "EnProceso",
-                "Completada"
-            };
-
-            var prioridadesValidas = new[]
-            {
-                "Baja",
-                "Media",
-                "Alta"
-            };
-
-            // Validación fechas
-            if (fechaInicio > fechaFin)
-            {
-                return BadRequest(
-                    "fechaInicio no puede ser mayor que fechaFin");
-            }
-
-            // Validación estado
-            if (!string.IsNullOrEmpty(estado) &&
-                !estadosValidos.Contains(estado))
-            {
-                return BadRequest("Estado inválido");
-            }
-
-            // Validación prioridad
-            if (!string.IsNullOrEmpty(prioridad) &&
-                !prioridadesValidas.Contains(prioridad))
-            {
-                return BadRequest("Prioridad inválida");
-            }
-
-            var query = _context.Tareas.AsQueryable();
-
-            // Filtro estado
-            if (!string.IsNullOrEmpty(estado))
-            {
-                query = query.Where(t => t.Estado == estado);
-            }
-
-            // Filtro prioridad
-            if (!string.IsNullOrEmpty(prioridad))
-            {
-                query = query.Where(t => t.Prioridad == prioridad);
-            }
-
-            // Filtro fecha inicio
-            if (fechaInicio.HasValue)
-            {
-                query = query.Where(t =>
-                    t.FechaVencimiento >= fechaInicio.Value);
-            }
-
-            // Filtro fecha fin
-            if (fechaFin.HasValue)
-            {
-                query = query.Where(t =>
-                    t.FechaVencimiento <= fechaFin.Value);
-            }
-
-            return await query.ToListAsync();
+            return BadRequest("fechaInicio no puede ser mayor que fechaFin");
         }
+    }
+
+    // Filtro estado
+    if (!string.IsNullOrEmpty(estado))
+    {
+        query = query.Where(t => t.Estado == estado);
+    }
+
+    // Filtro prioridad
+    if (!string.IsNullOrEmpty(prioridad))
+    {
+        query = query.Where(t => t.Prioridad == prioridad);
+    }
+
+    // Filtro fecha inicio
+    if (fechaInicio.HasValue)
+    {
+        query = query.Where(t => t.FechaCreacion >= fechaInicio.Value);
+    }
+
+    // Filtro fecha fin
+    if (fechaFin.HasValue)
+    {
+        query = query.Where(t => t.FechaCreacion <= fechaFin.Value);
+    }
+
+    return await query.ToListAsync();
+}
 
         // GET: api/tareas/5
         [HttpGet("{id}")]
