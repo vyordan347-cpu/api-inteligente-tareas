@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ApiInteligenteTareas.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a87b8e11e223b6cbfe52def9b243398a349f19ab")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cbf001c192174311ee7884193cfdde245b25d10b")]
 [assembly: System.Reflection.AssemblyProductAttribute("ApiInteligenteTareas.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ApiInteligenteTareas.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
